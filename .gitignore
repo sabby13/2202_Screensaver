@@ -4,3 +4,7 @@ dist
 *.log
 .DS_Store
 .vite
+
+# Native host (C#/.NET) build output
+native/**/bin/
+native/**/obj/

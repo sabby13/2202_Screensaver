@@ -21,4 +21,11 @@
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- The window.glass bridge, embedded so it needs no C# string escaping. -->
+    <EmbeddedResource Include="Bridge\bridge.js">
+      <LogicalName>GlassButterfly.Bridge.bridge.js</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
