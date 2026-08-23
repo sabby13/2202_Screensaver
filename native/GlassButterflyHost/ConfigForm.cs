@@ -59,15 +59,7 @@ internal sealed class ConfigForm : Form
 
         if (!result.Ok)
         {
-            // DIAGNOSTIC BUILD: show the full failure detail so it can be copied.
-            // (Windows message boxes support Ctrl+C to copy their contents.)
-            if (result.Diagnostics.Length > 0)
-            {
-                MessageBox.Show(
-                    result.Diagnostics,
-                    "GlassButterfly — WebView2 init failed (press Ctrl+C to copy)",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ShowStartupError();
             Close();
             return;
         }
@@ -77,6 +69,38 @@ internal sealed class ConfigForm : Form
         if (_entry == "index.html" && !IsDisposed && _web.CoreWebView2 is not null)
         {
             try { _web.CoreWebView2.OpenDevToolsWindow(); } catch { /* ignore */ }
+        }
+    }
+
+    /// <summary>Friendly, actionable message when the display engine can't start
+    /// (almost always a missing WebView2 Runtime). The full technical detail is
+    /// still written to the log file by the bootstrapper.</summary>
+    private static void ShowStartupError()
+    {
+        const string url = "https://developer.microsoft.com/microsoft-edge/webview2/";
+        string logPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "GlassButterfly", "webview-init-error.log");
+
+        string message =
+            "GlassButterfly couldn't start its display engine.\n\n" +
+            "This usually means the Microsoft Edge WebView2 Runtime isn't installed. " +
+            "It's included with Windows 11 and most up-to-date Windows 10 PCs.\n\n" +
+            "Open the free download page now?\n\n" +
+            "(Technical details were saved to:\n" + logPath + ")";
+
+        DialogResult choice = MessageBox.Show(
+            message, "GlassButterfly",
+            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+        if (choice == DialogResult.Yes)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(
+                    new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            catch { /* nothing more we can do */ }
         }
     }
 

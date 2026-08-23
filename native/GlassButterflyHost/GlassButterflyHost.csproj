@@ -13,6 +13,12 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
     <!-- Screensavers must be DPI-correct across mixed-DPI multi-monitor setups. -->
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <!-- Size trims (safe for this app; trimming itself is NOT safe for WinForms):
+         drop ICU data — clock/date are formatted in JS, not .NET — and ship only
+         English resource DLLs. Together these cut tens of MB from the self-
+         contained build. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Platforms>x64;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
   </PropertyGroup>
