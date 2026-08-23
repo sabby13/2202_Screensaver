@@ -26,6 +26,13 @@
     <EmbeddedResource Include="Bridge\bridge.js">
       <LogicalName>GlassButterfly.Bridge.bridge.js</LogicalName>
     </EmbeddedResource>
+    <!-- The entire built renderer (dist/web), zipped by packaging\build-package.ps1
+         and embedded so the .scr is a single self-contained file with no external
+         asset folder. Absent during plain dev builds (dotnet run), where the host
+         falls back to dist/web via RendererLocator. -->
+    <EmbeddedResource Include="renderer.zip" Condition="Exists('renderer.zip')">
+      <LogicalName>GlassButterfly.renderer.zip</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

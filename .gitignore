@@ -8,3 +8,6 @@ dist
 # Native host (C#/.NET) build output
 native/**/bin/
 native/**/obj/
+
+# Generated at package time: the renderer embedded into the .scr
+native/GlassButterflyHost/renderer.zip

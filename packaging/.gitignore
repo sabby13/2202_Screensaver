@@ -1,0 +1,4 @@
+# Packaging build artifacts
+/obj-publish/
+/package/
+/Output/

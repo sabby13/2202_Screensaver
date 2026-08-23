@@ -33,9 +33,12 @@ internal static class WebViewBootstrapper
         Action quit,
         Func<bool> stillValid)
     {
-        string userData = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "GlassButterfly", "WebView2");
+        // A per-process user-data folder. The Screen Saver control panel runs
+        // several host processes at once (a /p preview thumbnail alongside the /c
+        // settings window, etc.); if they share one WebView2 user-data folder,
+        // controller creation fails with 0x8007139F ("resource not in the correct
+        // state"). A unique folder per process avoids all cross-process contention.
+        string userData = PrepareUserDataFolder();
 
         if (!File.Exists(Path.Combine(rendererDir, "index.html")))
             return Fail("renderer-missing (index.html not found)", null, rendererDir, userData);
@@ -107,6 +110,52 @@ internal static class WebViewBootstrapper
         }
 
         return BootstrapResult.Success;
+    }
+
+    /// <summary>Returns a unique WebView2 user-data folder for this process and
+    /// arranges for it to be removed on exit. Also best-effort sweeps folders left
+    /// behind by host processes that are no longer running (folders belonging to a
+    /// live process stay locked and are skipped, so a running host is never
+    /// disturbed).</summary>
+    private static string PrepareUserDataFolder()
+    {
+        string root = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "GlassButterfly", "WebView2");
+
+        try
+        {
+            Directory.CreateDirectory(root);
+            foreach (string dir in Directory.GetDirectories(root))
+            {
+                string name = Path.GetFileName(dir);
+                int dash = name.IndexOf('-');
+                string pidPart = dash > 0 ? name[..dash] : name;
+                if (int.TryParse(pidPart, System.Globalization.NumberStyles.HexNumber,
+                        System.Globalization.CultureInfo.InvariantCulture, out int pid)
+                    && IsProcessAlive(pid))
+                    continue; // owned by a running host — leave it alone
+                try { Directory.Delete(dir, recursive: true); } catch { /* in use — skip */ }
+            }
+        }
+        catch { /* best-effort */ }
+
+        string folder = Path.Combine(root, $"{Environment.ProcessId:x}-{Guid.NewGuid():N}");
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+        {
+            try { Directory.Delete(folder, recursive: true); } catch { /* best-effort */ }
+        };
+        return folder;
+    }
+
+    private static bool IsProcessAlive(int pid)
+    {
+        try
+        {
+            using var p = System.Diagnostics.Process.GetProcessById(pid);
+            return !p.HasExited;
+        }
+        catch { return false; }
     }
 
     private static BootstrapResult Fail(string stage, Exception? ex, string rendererDir, string userData)
