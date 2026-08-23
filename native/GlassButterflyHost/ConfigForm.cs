@@ -31,6 +31,13 @@ internal sealed class ConfigForm : Form
         Height = height;
         StartPosition = FormStartPosition.CenterScreen;
         BackColor = Color.Black;
+        // Show the app icon (from ApplicationIcon) on the title bar and taskbar.
+        try
+        {
+            string? exe = Environment.ProcessPath;
+            if (exe is not null) Icon = System.Drawing.Icon.ExtractAssociatedIcon(exe);
+        }
+        catch { /* fall back to the default icon */ }
         // Settings dialog is fixed-size; the dev windowed host stays resizable.
         if (entry == "settings.html")
         {

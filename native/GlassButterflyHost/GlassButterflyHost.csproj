@@ -9,6 +9,8 @@
     <LangVersion>latest</LangVersion>
     <AssemblyName>GlassButterfly</AssemblyName>
     <RootNamespace>GlassButterfly</RootNamespace>
+    <!-- Icon shown on GlassButterfly.scr in Explorer and the Screen Saver panel. -->
+    <ApplicationIcon>logo.ico</ApplicationIcon>
     <!-- Screensavers must be DPI-correct across mixed-DPI multi-monitor setups. -->
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <Platforms>x64;ARM64</Platforms>
