@@ -2,15 +2,15 @@
   /* Tunable surface tokens — override per-instance via inline style if needed. */
   --glass-radius: clamp(24px, 3.6vmin, 44px);
   --glass-padding: clamp(18px, 3vmin, 40px);
-  /* Frosted fill: opaque enough to read as glass even where the blur is subtle. */
-  --glass-fill-top: rgba(255, 255, 255, 0.17);
-  --glass-fill-bottom: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.34);
-  --glass-glow: rgba(255, 255, 255, 0.16);
-  --glass-blur: 18px;
-  /* Strength and pace of the drifting prismatic reflection (the "flow"). */
-  --glass-refraction-opacity: 0.72;
-  --glass-refraction-speed: 30s;
+  /* Lighter fill (~30% less opaque) so the wallpaper stays the hero. */
+  --glass-fill-top: rgba(255, 255, 255, 0.060);
+  --glass-fill-bottom: rgba(255, 255, 255, 0.015);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --glass-glow: rgba(255, 255, 255, 0.12);
+  --glass-blur: 8px;
+  /* Strength and pace of the drifting prismatic reflection. */
+  --glass-refraction-opacity: 0.55;
+  --glass-refraction-speed: 34s;
 
   position: relative;
   display: inline-flex;
@@ -30,8 +30,8 @@
      so the dead reference invalidated the whole declaration and killed the
      blur. The liquid-glass look is carried by ::before/::after and the animated
      .glass-card__refraction layer instead. */
-  backdrop-filter: blur(var(--glass-blur)) saturate(185%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(185%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
 
   /* Barely-there border. */
   border: 1px solid var(--glass-border);

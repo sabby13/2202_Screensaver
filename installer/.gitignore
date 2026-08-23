@@ -1,0 +1,4 @@
+# Installer build artifacts
+/obj-publish/
+/stage/
+/Output/
