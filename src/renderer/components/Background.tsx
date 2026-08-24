@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { DEFAULT_SETTINGS } from '@shared/settings'
 import { DEFAULT_WALLPAPER_URL, resolveWallpaperUrl } from '../lib/wallpapers'
+import { setWallpaperMetrics } from '../lib/wallpaperMetrics'
 import './Background.css'
 
 /**
@@ -17,6 +18,12 @@ export function Background(): JSX.Element {
   const initial = window.glass?.initialSettings ?? DEFAULT_SETTINGS
   const [src, setSrc] = useState<string>(() => resolveWallpaperUrl(initial.backgroundImage))
   const [loaded, setLoaded] = useState(false)
+
+  // Publish the current wallpaper URL so the glass cards can sample it for their
+  // liquid-glass distortion layer (see .glass-card__distort).
+  useEffect(() => {
+    document.documentElement.style.setProperty('--wallpaper-url', `url("${src}")`)
+  }, [src])
 
   useEffect(() => {
     let active = true
@@ -50,7 +57,11 @@ export function Background(): JSX.Element {
         src={src}
         alt=""
         draggable={false}
-        onLoad={() => setLoaded(true)}
+        onLoad={(e) => {
+          setLoaded(true)
+          const img = e.currentTarget
+          setWallpaperMetrics({ url: src, iw: img.naturalWidth, ih: img.naturalHeight })
+        }}
         onError={handleError}
       />
     </div>
