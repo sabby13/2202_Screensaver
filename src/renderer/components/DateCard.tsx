@@ -62,7 +62,7 @@ export function DateCard(): JSX.Element {
   }, [])
 
   return (
-    <GlassCard className="date-card">
+    <GlassCard className="date-card" softDistort>
       <time className="date" dateTime={isoDate(now)}>
         {formatDate(now)}
       </time>
