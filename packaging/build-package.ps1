@@ -41,7 +41,11 @@ $RendererZip  = Join-Path $HostDir  'renderer.zip'
 $PublishDir   = Join-Path $PackagingDir 'obj-publish'
 $PackageDir   = Join-Path $PackagingDir 'package'
 $OutputDir    = Join-Path $PackagingDir 'Output'
-$FinalZip     = Join-Path $OutputDir 'GlassButterfly-Screensaver.zip'
+
+# Version comes from the .csproj (single source of truth) and names the ZIP.
+$Version = '0.0.0'
+if ((Get-Content $HostProject -Raw) -match '<Version>(.*?)</Version>') { $Version = $Matches[1] }
+$FinalZip = Join-Path $OutputDir "GlassButterfly-Screensaver-v$Version.zip"
 
 function Write-Step($m) { Write-Host "`n=== $m ===" -ForegroundColor Cyan }
 

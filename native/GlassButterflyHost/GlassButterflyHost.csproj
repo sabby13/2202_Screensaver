@@ -11,6 +11,15 @@
     <RootNamespace>GlassButterfly</RootNamespace>
     <!-- Icon shown on GlassButterfly.scr in Explorer and the Screen Saver panel. -->
     <ApplicationIcon>logo.ico</ApplicationIcon>
+    <!-- Version + metadata shown in the .scr's file Properties. -->
+    <Version>1.1.1</Version>
+    <FileVersion>1.1.1.0</FileVersion>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <Product>GlassButterfly</Product>
+    <Authors>Sahib (Sabby)</Authors>
+    <Company>Sahib (Sabby)</Company>
+    <Copyright>© 2026 Sahib (Sabby)</Copyright>
+    <FileDescription>GlassButterfly Screensaver</FileDescription>
     <!-- Screensavers must be DPI-correct across mixed-DPI multi-monitor setups. -->
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <!-- Size trims (safe for this app; trimming itself is NOT safe for WinForms):

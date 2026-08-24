@@ -1,5 +1,6 @@
 GlassButterfly Screensaver
 ==========================
+Version 1.1.1
 
 A minimal, beautiful screensaver: a liquid-glass clock and date over your
 wallpaper, with realistic 3D butterflies drifting gently across the screen.
